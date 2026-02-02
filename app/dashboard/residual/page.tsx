@@ -5,6 +5,8 @@ import { calculateResidualValuation } from "@/lib/valuation/residual";
 import type { ResidualValuationInput, ResidualValuationResult } from "@/types/valuation";
 import { formatCurrency } from "@/utils/formatCurrency";
 import DownloadReportButton from "../components/DownloadReportButton";
+import { usePropertyContext } from "../context/PropertyContext";
+import { useEffect } from "react";
 
 export default function ResidualValuationPage() {
   const [property, setProperty] = useState({
@@ -18,9 +20,12 @@ export default function ResidualValuationPage() {
     developmentCosts: 20000000,
     interestRate: 5,
   });
-
+  const { setResidualResult } = usePropertyContext();
   const result: ResidualValuationResult = calculateResidualValuation(inputs);
 
+useEffect(() => {
+  setResidualResult(result);
+}, [result, setResidualResult]);
   function handleChange(field: keyof ResidualValuationInput, value: number) {
     setInputs((prev) => ({ ...prev, [field]: value }));
   }

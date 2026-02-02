@@ -5,6 +5,8 @@ import { calculateCostValuation } from "@/lib/valuation/cost";
 import type { CostValuationInput, CostValuationResult } from "@/types/valuation";
 import { formatCurrency } from "@/utils/formatCurrency";
 import DownloadReportButton from "../components/DownloadReportButton";
+import { usePropertyContext } from "../context/PropertyContext";
+import { useEffect } from "react";
 
 export default function CostValuationPage() {
   const [property, setProperty] = useState({
@@ -18,8 +20,14 @@ export default function CostValuationPage() {
     depreciationRate: 10,
     landValue: 5000000,
   });
+  const { setCostResult } = usePropertyContext();
 
-  const result: CostValuationResult = calculateCostValuation(inputs);
+ const result: CostValuationResult = calculateCostValuation(inputs);
+
+useEffect(() => {
+  setCostResult(result);
+}, [result, setCostResult]);
+
 
   function handleChange(field: keyof CostValuationInput, value: number) {
     setInputs((prev) => ({ ...prev, [field]: value }));

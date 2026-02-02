@@ -84,7 +84,14 @@ export default function DashboardPage() {
           </p>
         </div>
 
-        <DownloadReportButton propertyName="Sample Nairobi Property" />
+        <DownloadReportButton
+  property={{
+    name: "Sample Nairobi Property",
+    location: "Nairobi, Kenya",
+    address: "123 Riverside Drive",
+  }}
+/>
+
       </div>
 
       {/* ================= METRICS ================= */}
@@ -93,7 +100,7 @@ export default function DashboardPage() {
           {metrics.map((m) => (
             <MetricCard
               key={m.title}
-              title={m.title}   // ✅ title, not label
+              title={m.title}   
               value={m.value}
             />
           ))}

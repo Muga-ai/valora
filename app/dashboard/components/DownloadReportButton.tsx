@@ -3,16 +3,22 @@
 import { generatePdfReport } from "@/lib/pdf/generate-report";
 import { usePropertyContext } from "@/app/dashboard/context/PropertyContext";
 
-interface Props {
-  propertyName: string;
+interface Property {
+  name: string;
+  location: string;
+  address?: string;
 }
 
-export default function DownloadReportButton({ propertyName }: Props) {
+interface Props {
+  property: Property;
+}
+
+export default function DownloadReportButton({ property }: Props) {
   const { income, sales, cost, residual } = usePropertyContext();
 
   const handleDownload = () => {
     const doc = generatePdfReport({
-      propertyName,
+      property,
       income,
       sales,
       cost,

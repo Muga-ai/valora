@@ -8,8 +8,14 @@ import type {
   ResidualValuationResult,
 } from "@/types/valuation";
 
+export interface Property {
+  name: string;
+  location: string;
+  address?: string;
+}
+
 export interface ValuationReportData {
-  propertyName: string;
+  property: Property;
   income?: IncomeValuationResult;
   sales?: SalesValuationResult;
   cost?: CostValuationResult;
@@ -19,15 +25,19 @@ export interface ValuationReportData {
 export function generatePdfReport(data: ValuationReportData) {
   const doc = new jsPDF();
 
-  // --- Header ---
+  // Header
   doc.setFontSize(18);
-  doc.text(`Valuation Report: ${data.propertyName}`, 20, 20);
+  doc.text(`Valuation Report: ${data.property.name}`, 20, 20);
   doc.setFontSize(12);
-  doc.text(`Generated: ${new Date().toLocaleString()}`, 20, 30);
+  doc.text(`Location: ${data.property.location}`, 20, 28);
+  if (data.property.address) {
+    doc.text(`Address: ${data.property.address}`, 20, 36);
+  }
+  doc.text(`Generated: ${new Date().toLocaleString()}`, 20, 44);
 
-  let y = 40;
+  let y = 54;
 
-  // --- Income ---
+  // Income
   if (data.income) {
     doc.setFontSize(14);
     doc.text("Income Approach", 20, y);
@@ -47,7 +57,7 @@ export function generatePdfReport(data: ValuationReportData) {
     y += 10;
   }
 
-  // --- Sales ---
+  // Sales
   if (data.sales) {
     doc.setFontSize(14);
     doc.text("Sales Comparison", 20, y);
@@ -63,7 +73,7 @@ export function generatePdfReport(data: ValuationReportData) {
     y += 10;
   }
 
-  // --- Cost ---
+  // Cost
   if (data.cost) {
     doc.setFontSize(14);
     doc.text("Cost Approach", 20, y);
@@ -79,7 +89,7 @@ export function generatePdfReport(data: ValuationReportData) {
     y += 10;
   }
 
-  // --- Residual ---
+  // Residual
   if (data.residual) {
     doc.setFontSize(14);
     doc.text("Residual Valuation", 20, y);
@@ -93,6 +103,5 @@ export function generatePdfReport(data: ValuationReportData) {
     y += 10;
   }
 
-  // --- Return PDF as Blob ---
   return doc;
 }

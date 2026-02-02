@@ -5,6 +5,9 @@ import { calculateSalesValuation } from "@/lib/valuation/sales";
 import type { SalesValuationInput, SalesValuationResult } from "@/types/valuation";
 import { formatCurrency } from "@/utils/formatCurrency";
 import DownloadReportButton from "../components/DownloadReportButton";
+import { usePropertyContext } from "../context/PropertyContext";
+import { useEffect } from "react";
+
 
 export default function SalesValuationPage() {
   const [property, setProperty] = useState({
@@ -12,7 +15,7 @@ export default function SalesValuationPage() {
     location: "Nairobi, Kenya",
     address: "",
   });
-
+  const { setSalesResult } = usePropertyContext();
   const [inputs, setInputs] = useState<SalesValuationInput>({
     comparableSales: 5,
     salePrices: [10000000, 12000000, 11500000, 12500000, 11000000],
@@ -20,6 +23,11 @@ export default function SalesValuationPage() {
   });
 
   const result: SalesValuationResult = calculateSalesValuation(inputs);
+
+useEffect(() => {
+  setSalesResult(result);
+}, [result, setSalesResult]);
+
 
   function handleNumberArrayChange(index: number, field: "salePrices" | "adjustments", value: number) {
     setInputs((prev) => ({
